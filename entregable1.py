@@ -23,7 +23,7 @@ class Maquina:
         self.__tipo = ''
 
     def __str__(self):
-        return f"Modelo: {self._modelo}\nPrecio: {self._precio}\nStock: {self._stock}\nEmpresa: {self._empresa}"
+        return f"Modelo: {self.__modelo}\nPrecio: {self.__precio}\nStock: {self.__stock}\nEmpresa: {self.__empresa}"
 
     def verTipo(self):
         return self.__tipo
@@ -87,7 +87,7 @@ class DesfibriladorHospitalario(Maquina):
     def verTipo(self):
         return self.__tipo
     def __str__(self):
-        return super().__str__() + f"\nEnergía Máxima: {self._energia_maxima}"
+        return super().__str__() + f"\nEnergía Máxima: {self.__energia_maxima}"
     def editar_informacion(self):
         super().editar_informacion()
         nuevo_energia_maxima = Verificar_flotante("Nueva energía Máxima: ")
@@ -109,7 +109,7 @@ class MaquinaElectrocardiografia(Maquina):
         self.__num_derivaciones = nuevoNumero
 
     def __str__(self):
-        return super().__str__() + f"\nNúmero de Derivaciones: {self._num_derivaciones}"
+        return super().__str__() + f"\nNúmero de Derivaciones: {self.__num_derivaciones}"
     
     def editar_informacion(self):
         super().editar_informacion()
@@ -118,13 +118,13 @@ class MaquinaElectrocardiografia(Maquina):
 class ResonanciaMagnetica(Maquina):
     def __init__(self, precio, stock, modelo, empresa, intensidad_campo):
         super().__init__(precio, stock, modelo, empresa)
-        self._intensidad_campo = intensidad_campo
+        self.__intensidad_campo = intensidad_campo
         self.__tipo = 'Resonancia Magnetica'
     def verTipo(self):
         return self.__tipo
 
     def __str__(self):
-        return super().__str__() + f"\nIntensidad de Campo Magnético (Tesla): {self._intensidad_campo}"
+        return super().__str__() + f"\nIntensidad de Campo Magnético (Tesla): {self.__intensidad_campo}"
    
     def editar_informacion(self):
         super().editar_informacion()
@@ -136,9 +136,18 @@ class Sistema:
     
     def maquina_existe(self,modelo):
         for i in self.listaMaquinas:
-            if i is modelo:
+            if i == modelo:
                 return True
         return False
+    def mostrar_datos_maquina(self):
+        modelo = input("Ingrese el modelo de la maquina: ")
+        maquina = self.maquina_existe(modelo)
+
+        if maquina == True:
+            print("Datos de la maquina: ")
+            print(self.listaMaquinas[modelo])
+        else:
+            print("No se encontró una maquina con el  modelo {modelo}")
     
     def Eliminar_Maquina(self):
         a = True
@@ -158,45 +167,62 @@ def main():
     while True:
         print("\nMenú de Administración de Máquinas:")
         opcion = input('''Seleccione la opción deseada:\n1.Crear Maquina\n2. Eliminar Máquina\n3. seleccionar Máquina\n4. Editar los datos de un equipo biomedico\n5.salir''')
-        if opcion is '1':
+        if opcion == '1':
             while True: 
                 tipo_maq = input('seleccione la maquina que desea añadir: \n1.Desfribilador Hospitalario\n2. Maquina Electrocardiografica\n3. Maquina de Resonancia Magnetica')
-                if tipo_maq is '1':
-                    price_1 = Verificar_entero('el precio')
-                    stock_1 = Verificar_entero('el stock')
-                    modelo_1 = input('Ingrese modelo de la maquina')
-                    empresa_1 = input('Ingrese la empresa fabricante')
-                    Energia_Maxima = Verificar_flotante('la energía maxima')
-                    maquina_1 = DesfibriladorHospitalario(price_1, stock_1, modelo_1, empresa_1, Energia_Maxima)
-                    sistema.listaMaquinas[maquina_1.modelo] = maquina_1
+                modelo = input('Ingrese modelo de la maquina')
+                
+                if sistema.maquina_existe(modelo) == True:
+                    print('el modelo ingresado ya existe... intente de nuevo')
+                    continue
+                if sistema.maquina_existe(modelo) == False:
+                    pass
+                price = Verificar_entero('el precio')
+                stock = Verificar_entero('el stock')
+                empresa = input('Ingrese la empresa fabricante')
 
-                elif tipo_maq is '2':
-                    price_2 = Verificar_entero('el precio')
-                    stock_2 = Verificar_entero('el stock')
-                    modelo_2 = input('Ingrese modelo de la maquina')
-                    empresa_2 = input('Ingrese la empresa fabricante')
+                if tipo_maq == '1':
+                    Energia_Maxima = Verificar_flotante('la energía maxima')
+                    maquina = DesfibriladorHospitalario(price, stock, modelo, empresa, Energia_Maxima)
+                    sistema.listaMaquinas[maquina.modelo] = maquina
+                    break
+
+                elif tipo_maq == '2':
                     Num_Derivaciones = Verificar_flotante('el número de derivaciones')
-                    maquina_2 = MaquinaElectrocardiografia(price_2, stock_2, modelo_2, empresa_2, Num_Derivaciones)
-                    sistema.listaMaquinas[maquina_2.modelo] = maquina_2
-                elif tipo_maq is '3':
-                    price_3 = Verificar_entero('el precio')
-                    stock_3 = Verificar_entero('el stock')
-                    modelo_3 = input('Ingrese modelo de la maquina')
-                    empresa_3 = input('Ingrese la empresa fabricante')
+                    maquina = MaquinaElectrocardiografia(price, stock, modelo, empresa, Num_Derivaciones)
+                    sistema.listaMaquinas[maquina.modelo] = maquina
+                    break
+                    
+                elif tipo_maq == '3':
                     Intensidad_Campo_Magnetico = Verificar_flotante('La intensidad del campo magnetico')
-                    maquina_3 = ResonanciaMagnetica(price_3, stock_3, modelo_3, empresa_3, Intensidad_Campo_Magnetico)
-                    sistema.listaMaquinas[maquina_3.modelo] = maquina_3
+                    maquina = ResonanciaMagnetica(price, stock, modelo, empresa, Intensidad_Campo_Magnetico)
+                    sistema.listaMaquinas[maquina.modelo] = maquina
+                    break
                 else:
                     print('seleccione una opción válida(el número)\nReintentando...')
-        elif opcion is '2':
-            pass
-        elif opcion is '3':
-            pass
-        elif opcion is '4':
+
+        elif opcion == '2':
+            sistema.Eliminar_Maquina()
+
+        elif opcion == '3':
+            sistema.mostrar_datos_maquina()
+
+        elif opcion == '4': #CÓMO EDITAR LAS PROPIEDADES ESPECIALES DE CADA CLASES PREGUNTAR
+            
             while True:
-                edit = input("Editar información de la maquina, seleccione:\n1.Editar precio\n2.editar stock\n3.Editar modelo\n4. editar empresa.")
-        elif opcion is '5':
+                modelo = input("Ingrese el modelo de la máquina que desea editar: ")
+                if sistema.maquina_existe(modelo):
+                    maquina = sistema.listaMaquinas[modelo]
+                    maquina.editar_informacion()
+                    break
+                elif sistema.maquina_existe(modelo) == False:
+                    print("la maquina no existe en la base de datos, intente de nuevo")
+                    continue
+
+        elif opcion == '5':
             print('cerrando sistema...')
             break
         else:
             print('Usted ha seleccionado una opción invalida, intente de nuevo.')
+
+main()
