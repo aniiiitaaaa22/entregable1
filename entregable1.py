@@ -88,6 +88,13 @@ class DesfibriladorHospitalario(Maquina):
         return self.__tipo
     def __str__(self):
         return super().__str__() + f"\nEnergía Máxima: {self.__energia_maxima}"
+    
+    @property
+    def ver_energia_maxima(self):
+        return self.__energia_maxima
+    @ver_energia_maxima.setter
+    def asignar_energia_maxima(self , nueva_energia):
+        self.__energia_maxima = nueva_energia
     #def editar_informacion(self):
         #super().editar_informacion()
         #nuevo_energia_maxima = Verificar_flotante("Nueva energía Máxima: ")
@@ -120,6 +127,15 @@ class ResonanciaMagnetica(Maquina):
         super().__init__(precio, stock, modelo, empresa)
         self.__intensidad_campo = intensidad_campo
         self.__tipo = 'Resonancia Magnetica'
+    
+    @property
+    def ver_intensidad_campo(self):
+        return self.__intensidad_campo
+
+    @ver_intensidad_campo.setter
+    def asignar_intensidad_campo(self,nueva_intensdidad):
+        self.__intensidad_campo = nueva_intensdidad
+
     def verTipo(self):
         return self.__tipo
 
@@ -196,14 +212,14 @@ class Sistema:
             elif opcion_atributo == '5':
                 if isinstance(maquina, DesfibriladorHospitalario):
                     nuevo_energia_maxima = Verificar_flotante("Nueva Energía Máxima: ")
-                    maquina.energia_maxima = nuevo_energia_maxima
+                    maquina.asignar_energia_maxima = nuevo_energia_maxima
                     #energia_maxima cuál es problema
                 elif isinstance(maquina, MaquinaElectrocardiografia):
                     nuevo_num_derivaciones = Verificar_entero("Nuevo Número de Derivaciones: ")
                     maquina.asignar_NumeroDerivaciones = nuevo_num_derivaciones
                 elif isinstance(maquina, ResonanciaMagnetica):
                     nuevo_intensidad_campo = Verificar_flotante("Nueva Intensidad de Campo Magnético (Tesla): ")
-                    maquina.intensidad_campo = nuevo_intensidad_campo
+                    maquina.asignar_intensidad_campo = nuevo_intensidad_campo
                     #cuál es el problema de intensidad_campo
 
             elif opcion_atributo == '6':
@@ -219,8 +235,8 @@ def main():
         opcion = input('''Seleccione la opción deseada:\n1.Crear Maquina\n2. Eliminar Máquina\n3. seleccionar Máquina\n4. Editar los datos de un equipo biomedico\n5.salir''')
         if opcion == '1':
             while True: 
-                tipo_maq = input('seleccione la maquina que desea añadir: \n1.Desfribilador Hospitalario\n2. Maquina Electrocardiografica\n3. Maquina de Resonancia Magnetica')
-                modelo = input('Ingrese modelo de la maquina')
+                tipo_maq = input('seleccione la maquina que desea añadir:  \n1.Desfribilador Hospitalario\n2. Maquina Electrocardiografica\n3. Maquina de Resonancia Magnetica'  )
+                modelo = input('Ingrese modelo de la maquina'  )
                 
                 if sistema.maquina_existe(modelo) == True:
                     print('el modelo ingresado ya existe... intente de nuevo')
