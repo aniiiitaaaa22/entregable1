@@ -60,23 +60,23 @@ class Maquina:
     def empresa(self, nueva_empresa):
         self.__empresa = nueva_empresa
     
-    def editar_informacion(self):
-        edit = input("Editor de información de máquinas, seleccione una opción:\n1.Editar Precio.\n2.Editar Stock\n3.Editar Modelo\n4 Editar Empresa.")
+    #def editar_informacion(self):
+        #edit = input("Editor de información de máquinas, seleccione una opción:\n1.Editar Precio.\n2.Editar Stock\n3.Editar Modelo\n4 Editar Empresa.")
 
-        if edit == "1":
-            nuevo_precio = Verificar_flotante("Nuevo Precio: ")
-            self.__precio = nuevo_precio
-        if edit == "2":
-            nuevo_stock = Verificar_flotante("Nuevo stock: ")
-            self.__stock = nuevo_stock
-        if edit == "3":
-            nuevo_mod = Verificar_flotante("Nuevo modelo: ")
-            self.__modelo = nuevo_mod
-        if edit == "4":
-            nuevo_empresa = Verificar_flotante("Nuevo empresa: ")
-            self.__empresa = nuevo_empresa
-        else:
-            print("Opción no válida, por favor seleccione otra opción.")
+        #if edit == "1":
+           # nuevo_precio = Verificar_flotante("Nuevo Precio: ")
+            #self.__precio = nuevo_precio
+        #if edit == "2":
+            #nuevo_stock = Verificar_flotante("Nuevo stock: ")
+           # self.__stock = nuevo_stock
+       # if edit == "3":
+           # nuevo_mod = Verificar_flotante("Nuevo modelo: ")
+           # self.__modelo = nuevo_mod
+        #if edit == "4":
+            #nuevo_empresa = Verificar_flotante("Nuevo empresa: ")
+            #self.__empresa = nuevo_empresa
+        #else:
+            #print("Opción no válida, por favor seleccione otra opción.")
 
 
 class DesfibriladorHospitalario(Maquina):
@@ -88,10 +88,10 @@ class DesfibriladorHospitalario(Maquina):
         return self.__tipo
     def __str__(self):
         return super().__str__() + f"\nEnergía Máxima: {self.__energia_maxima}"
-    def editar_informacion(self):
-        super().editar_informacion()
-        nuevo_energia_maxima = Verificar_flotante("Nueva energía Máxima: ")
-        self.__energia_maxima = nuevo_energia_maxima
+    #def editar_informacion(self):
+        #super().editar_informacion()
+        #nuevo_energia_maxima = Verificar_flotante("Nueva energía Máxima: ")
+        #self.__energia_maxima = nuevo_energia_maxima
 
 class MaquinaElectrocardiografia(Maquina):
     def __init__(self, precio, stock, modelo, empresa, num_derivaciones):
@@ -111,10 +111,10 @@ class MaquinaElectrocardiografia(Maquina):
     def __str__(self):
         return super().__str__() + f"\nNúmero de Derivaciones: {self.__num_derivaciones}"
     
-    def editar_informacion(self):
-        super().editar_informacion()
-        nuevo_num_derivaciones = Verificar_flotante("Nuevo número de derivaciones: ")
-        self.__num_derivaciones = nuevo_num_derivaciones
+    #def editar_informacion(self):
+        #super().editar_informacion()
+       # nuevo_num_derivaciones = Verificar_flotante("Nuevo número de derivaciones: ")
+        #self.__num_derivaciones = nuevo_num_derivaciones
 class ResonanciaMagnetica(Maquina):
     def __init__(self, precio, stock, modelo, empresa, intensidad_campo):
         super().__init__(precio, stock, modelo, empresa)
@@ -126,10 +126,10 @@ class ResonanciaMagnetica(Maquina):
     def __str__(self):
         return super().__str__() + f"\nIntensidad de Campo Magnético (Tesla): {self.__intensidad_campo}"
    
-    def editar_informacion(self):
-        super().editar_informacion()
-        nuevo_intensidad_campo = Verificar_flotante("Nueva intensidad de campo magnético en teslas: ")
-        self._intensidad_campo = nuevo_intensidad_campo
+    #def editar_informacion(self):
+        #super().editar_informacion()
+        #nuevo_intensidad_campo = Verificar_flotante("Nueva intensidad de campo magnético en teslas: ")
+        #self._intensidad_campo = nuevo_intensidad_campo
 class Sistema:
     def __init__(self):
         self.listaMaquinas = {}
@@ -161,6 +161,56 @@ class Sistema:
             elif f == False:
                 print('la maquina no existe en la base de datos')
                 continue
+    def editar_atributos_maquina(self, maquina):
+        while True:
+            print("\nMenú de Edición de Atributos:")
+            print("1. Editar Precio")
+            print("2. Editar Stock")
+            print("3. Editar Modelo")
+            print("4. Editar Empresa")
+            
+            if isinstance(maquina, DesfibriladorHospitalario):
+                print("5. Editar Energía Máxima")
+            elif isinstance(maquina, MaquinaElectrocardiografia):
+                print("5. Editar Número de Derivaciones")
+            elif isinstance(maquina, ResonanciaMagnetica):
+                print("5. Editar Intensidad de Campo Magnético (Tesla)")
+            
+            print("6. Volver al Menú Principal")
+
+            opcion_atributo = input("Seleccione el atributo que desea editar (1-6): ")
+            
+            if opcion_atributo == '1':
+                nuevo_precio = Verificar_flotante("Nuevo Precio: ")
+                maquina.precio = nuevo_precio
+            elif opcion_atributo == '2':
+                nuevo_stock = Verificar_entero("Nuevo Stock: ")
+                maquina.stock = nuevo_stock
+            elif opcion_atributo == '3':
+                nuevo_modelo = input("Nuevo Modelo: ")
+                maquina.modelo = nuevo_modelo
+            elif opcion_atributo == '4':
+                nueva_empresa = input("Nueva Empresa: ")
+                maquina.empresa = nueva_empresa
+            
+            elif opcion_atributo == '5':
+                if isinstance(maquina, DesfibriladorHospitalario):
+                    nuevo_energia_maxima = Verificar_flotante("Nueva Energía Máxima: ")
+                    maquina.energia_maxima = nuevo_energia_maxima
+                    #energia_maxima cuál es problema
+                elif isinstance(maquina, MaquinaElectrocardiografia):
+                    nuevo_num_derivaciones = Verificar_entero("Nuevo Número de Derivaciones: ")
+                    maquina.asignar_NumeroDerivaciones = nuevo_num_derivaciones
+                elif isinstance(maquina, ResonanciaMagnetica):
+                    nuevo_intensidad_campo = Verificar_flotante("Nueva Intensidad de Campo Magnético (Tesla): ")
+                    maquina.intensidad_campo = nuevo_intensidad_campo
+                    #cuál es el problema de intensidad_campo
+
+            elif opcion_atributo == '6':
+                break
+            else:
+                print("Opción no válida, por favor seleccione otra opción.")
+
     
 def main():
     sistema = Sistema()
@@ -213,7 +263,7 @@ def main():
                 modelo = input("Ingrese el modelo de la máquina que desea editar: ")
                 if sistema.maquina_existe(modelo):
                     maquina = sistema.listaMaquinas[modelo]
-                    maquina.editar_informacion()
+                    sistema.editar_atributos_maquina(maquina)
                     break
                 elif sistema.maquina_existe(modelo) == False:
                     print("la maquina no existe en la base de datos, intente de nuevo")
